@@ -1,7 +1,7 @@
 # LearnLink 🎓  
 **The Collaborative Learning Hub**
 
-LearnLink is a web platform that helps students share resources, form study groups, and track their learning progress — all in one place.  
+LearnLink is a web platform that helps students share resources, form study groups, and track their learning progress all in one place.  
 It’s like a mix of **LinkedIn + Notion + Study Groups**, focused purely on learning and collaboration.
 
 ---
