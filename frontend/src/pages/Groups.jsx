@@ -1,42 +1,33 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const STORAGE_KEY = "learnlink_groups";
 
 export default function Groups() {
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+      console.error("[Groups] Failed to read localStorage:", err);
+      return [];
+    }
+  });
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
-  const initializedRef = useRef(false);
+  const canUseStorage = typeof window !== "undefined" && !!window.localStorage;
 
-  // load once
+  // persist whenever the list changes
   useEffect(() => {
+    if (!canUseStorage) return;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      console.log("[Groups] localStorage.raw:", raw);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        setGroups(parsed);
-        console.log("[Groups] Loaded from storage:", parsed);
-      } else {
-        console.log("[Groups] No data in storage.");
-      }
-    } catch (err) {
-      console.error("[Groups] Error reading localStorage:", err);
-    } finally {
-      initializedRef.current = true;
-    }
-  }, []);
-
-  // save on change, but only after initial load
-  useEffect(() => {
-    if (!initializedRef.current) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
-      console.log("[Groups] Saved to storage:", groups);
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
     } catch (err) {
       console.error("[Groups] Error saving groups:", err);
     }
-  }, [groups]);
+  }, [groups, canUseStorage]);
 
   const createGroup = () => {
     if (!name.trim()) {
