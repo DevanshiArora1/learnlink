@@ -2,19 +2,26 @@ import { useState, useEffect } from "react";
 
 const STORAGE_KEY = "learnlink_groups";
 
+// Function to handle initial state loading from localStorage
+const initializeGroups = () => {
+  // Check for window to handle SSR environments
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    // Ensure raw data is not null before parsing
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.error("[Groups] Failed to read localStorage:", err);
+    return [];
+  }
+};
+
 export default function Groups() {
-  // Load initial groups safely
-  const [groups, setGroups] = useState(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch (err) {
-      console.error("[Groups] Failed to read localStorage:", err);
-      return [];
-    }
-  });
+  // Load initial groups safely using initializer function
+  const [groups, setGroups] = useState(initializeGroups);
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -22,14 +29,23 @@ export default function Groups() {
 
   const canUseStorage = typeof window !== "undefined" && !!window.localStorage;
 
-  // Save to storage when groups change
+  // Save to storage when groups change (DEBOUNCED)
   useEffect(() => {
     if (!canUseStorage) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
-    } catch (err) {
-      console.error("[Groups] Error saving:", err);
-    }
+
+    // Set a timer to save the profile data after 500ms
+    const handler = setTimeout(() => {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
+      } catch (err) {
+        console.error("[Groups] Error saving:", err);
+      }
+    }, 500); // 500ms delay
+
+    // Cleanup: clear the previous timer if groups changes again
+    return () => {
+      clearTimeout(handler);
+    };
   }, [groups, canUseStorage]);
 
   // Create a new group
@@ -66,7 +82,8 @@ export default function Groups() {
           ? {
               ...g,
               joined: !g.joined,
-              members: g.joined ? g.members - 1 : g.members + 1,
+              // Correctly increment/decrement members based on new joined state
+              members: !g.joined ? g.members + 1 : g.members - 1,
             }
           : g
       )
