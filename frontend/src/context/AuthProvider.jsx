@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     const login = async (email, password) => {
         setLoading(true);
         try {
-            const res = await api.post("/auth/login", { email, password });
+            const res = await api.post("/api/auth/login", { email, password });
             const { token: newToken, user: newUser } = res.data;
 
             setToken(newToken);
@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
     const register = async (name, email, password) => {
         setLoading(true);
         try {
-            const res = await api.post("/auth/register", { name, email, password });
+            const res = await api.post("/api/auth/register", { name, email, password });
             const { token: newToken, user: newUser } = res.data;
 
             setToken(newToken);
