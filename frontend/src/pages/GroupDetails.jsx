@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { getAllResources, getAllGroups } from "../api/api";
+import { getAllResources, getAllGroups } from "../api/resources";
 
 export default function Dashboard() {
   const { user } = useAuth();
