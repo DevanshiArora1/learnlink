@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 import { getAllGroups, getAllResources } from "../api/resources";
 
 export default function Profile() {
@@ -17,14 +17,10 @@ export default function Profile() {
       setMyGroups(groups.filter((g) => g.createdBy === user.id));
 
       // Groups I joined
-      setJoinedGroups(
-        groups.filter((g) => g.joinedUsers.includes(user.id))
-      );
+      setJoinedGroups(groups.filter((g) => g.joinedUsers.includes(user.id)));
 
       // My added resources
-      setMyResources(
-        resources.filter((r) => r.createdBy === user.id)
-      );
+      setMyResources(resources.filter((r) => r.createdBy === user.id));
     }
 
     load();
@@ -102,9 +98,7 @@ export default function Profile() {
                   Open Link
                 </a>
                 <p className="mt-1">{r.desc}</p>
-                <p className="text-sm mt-2 text-gray-600">
-                  Likes: {r.likes}
-                </p>
+                <p className="text-sm mt-2 text-gray-600">Likes: {r.likes}</p>
               </div>
             ))}
           </div>

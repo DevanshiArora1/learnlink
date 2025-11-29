@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 import { getAllResources, getAllGroups } from "../api/resources";
 
 export default function Dashboard() {
@@ -19,13 +19,9 @@ export default function Dashboard() {
       const groups = await getAllGroups();
 
       // Filter by current user
-      const myResources = resources.filter(
-        (r) => r.createdBy === user.id
-      );
+      const myResources = resources.filter((r) => r.createdBy === user.id);
 
-      const myCreatedGroups = groups.filter(
-        (g) => g.createdBy === user.id
-      );
+      const myCreatedGroups = groups.filter((g) => g.createdBy === user.id);
 
       const myJoinedGroups = groups.filter((g) =>
         g.joinedUsers.includes(user.id)
@@ -34,9 +30,7 @@ export default function Dashboard() {
       // Top liked resource
       const topRes =
         myResources.length > 0
-          ? myResources.reduce((max, r) =>
-              r.likes > max.likes ? r : max
-            )
+          ? myResources.reduce((max, r) => (r.likes > max.likes ? r : max))
           : null;
 
       // Activity timeline: last 6 months
@@ -97,9 +91,7 @@ export default function Dashboard() {
 
       {/* Top Resource */}
       <div className="mt-10 bg-white p-6 rounded-xl shadow">
-        <h2 className="text-2xl font-semibold mb-3">
-          Most Liked Resource ❤️
-        </h2>
+        <h2 className="text-2xl font-semibold mb-3">Most Liked Resource ❤️</h2>
 
         {!stats.topResource ? (
           <p className="text-gray-500">No resources added yet.</p>

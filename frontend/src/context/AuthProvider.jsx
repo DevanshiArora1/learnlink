@@ -30,24 +30,16 @@ export function AuthProvider({ children }) {
 
     // The problematic useEffect hook is now correctly REMOVED.
 
-    const login = async (email, password) => {
-        setLoading(true);
-        try {
-            const res = await api.post("/api/auth/login", { email, password });
-            const { token: newToken, user: newUser } = res.data;
+    const login = (userData, tokenData) => {
+    setToken(tokenData);
+    setUser(userData);
 
-            setToken(newToken);
-            setUser(newUser);
-            
-            localStorage.setItem("learnlink_token", newToken);
-            localStorage.setItem("learnlink_user", JSON.stringify(newUser));
-        } catch (error) {
-            console.error("Login failed:", error);
-            // Handle error (e.g., set error state, etc.)
-        } finally {
-            setLoading(false);
-        }
-    };
+    localStorage.setItem("learnlink_token", tokenData);
+    localStorage.setItem("learnlink_user", JSON.stringify(userData));
+
+    setLoading(false);
+};
+
 
     const register = async (name, email, password) => {
         setLoading(true);

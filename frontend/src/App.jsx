@@ -29,10 +29,18 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Resources />
-                  <GroupDetails />
                 </ProtectedRoute>
               }
             />
+            <Route 
+  path="/groups/:id" 
+  element={
+    <ProtectedRoute>
+      <GroupDetails />
+    </ProtectedRoute>
+  }
+/>
+
             <Route
               path="/groups"
               element={

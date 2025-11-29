@@ -4,10 +4,9 @@ import {
   createGroupAPI,
   joinGroupAPI,
   leaveGroupAPI,
-  deleteGroupAPI
+  deleteGroupAPI,
 } from "../api/groups";
-import { useAuth } from "../context/AuthContext";
-
+import { useAuth } from "../context/useAuth";
 export default function Groups() {
   const { user } = useAuth();
   const [groups, setGroups] = useState([]);
@@ -32,7 +31,10 @@ export default function Groups() {
     const newGroup = await createGroupAPI({
       name,
       desc,
-      tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
     });
 
     setGroups((prev) => [newGroup, ...prev]);
@@ -44,9 +46,7 @@ export default function Groups() {
 
   // Join or leave
   const toggleJoin = async (id, isJoined) => {
-    const updated = isJoined
-      ? await leaveGroupAPI(id)
-      : await joinGroupAPI(id);
+    const updated = isJoined ? await leaveGroupAPI(id) : await joinGroupAPI(id);
 
     setGroups((prev) => prev.map((g) => (g._id === id ? updated : g)));
   };
@@ -125,11 +125,11 @@ export default function Groups() {
                       </button>
                     )}
                     <a
-    href={`/groups/${g._id}`}
-    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-  >
-    View
-  </a>
+                      href={`/groups/${g._id}`}
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                    >
+                      View
+                    </a>
                     {/* Join / Leave */}
                     <button
                       onClick={() => toggleJoin(g._id, isJoined)}
