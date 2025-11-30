@@ -17,28 +17,35 @@ export default function Navbar() {
       </Link>
 
       <div className="flex gap-6 text-lg">
+        {/* Always visible */}
         <Link to="/">Home</Link>
-        <Link to="/resources">Resources</Link>
-        <Link to="/groups">Groups</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/profile">Profile</Link>
 
-        {!token ? (
+        {/* If NOT logged in */}
+        {!token && (
           <>
             <Link to="/login" className="text-pink-600 font-semibold">
               Login
             </Link>
             <Link to="/register" className="text-pink-600 font-semibold">
-              Register
-            </Link>
+              Join</Link>
           </>
-        ) : (
-          <button
-            onClick={handleLogout}
-            className="text-red-500 font-semibold ml-4"
-          >
-            Logout
-          </button>
+        )}
+
+        {/* If logged in */}
+        {token && (
+          <>
+            <Link to="/resources">Resources</Link>
+            <Link to="/groups">Groups</Link>
+            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/profile">Profile</Link>
+
+            <button
+              onClick={handleLogout}
+              className="text-red-500 font-semibold ml-4"
+            >
+              Logout
+            </button>
+          </>
         )}
       </div>
     </nav>
