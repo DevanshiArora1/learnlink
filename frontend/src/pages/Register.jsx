@@ -28,40 +28,50 @@ export default function Register() {
 
   return (
     <div className="flex justify-center mt-16">
-      <div className="w-96 bg-white p-6 rounded-xl shadow">
-        <h1 className="text-2xl font-bold mb-4">Create Account</h1>
+  <div className="w-96 bg-white p-6 rounded-xl shadow">
+    <h1 className="text-2xl font-bold mb-4">Create Account</h1>
 
-        {error && <p className="text-red-500 mb-3">{error}</p>}
+    {error && <p className="text-red-500 mb-3">{error}</p>}
 
-        <input
-          className="w-full p-3 border rounded mb-3 bg-gray-100"
-          placeholder="Full name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+    <input
+      className="w-full p-3 border rounded mb-3 bg-gray-100"
+      placeholder="Name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+    />
 
-        <input
-          className="w-full p-3 border rounded mb-3 bg-gray-100"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <input
+      className="w-full p-3 border rounded mb-3 bg-gray-100"
+      placeholder="Email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
 
-        <input
-          className="w-full p-3 border rounded mb-3 bg-gray-100"
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    <input
+      className="w-full p-3 border rounded mb-3 bg-gray-100"
+      placeholder="Password"
+      type="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
 
-        <button
-          onClick={submit}
-          className="w-full bg-pink-500 text-white py-3 rounded-lg"
-        >
-          Register
-        </button>
-      </div>
-    </div>
+    <button
+      onClick={submit}
+      className="w-full bg-pink-500 text-white py-3 rounded-lg"
+    >
+      Register
+    </button>
+
+    {/* Added text */}
+    <p className="mt-4 text-center text-sm text-gray-600">
+      Already LearnLinked?{" "}
+      <a href="/login" className="text-pink-600 font-semibold hover:underline">
+        Login!
+      </a>
+    </p>
+
+  </div>
+</div>
+
   );
 }
