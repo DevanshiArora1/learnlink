@@ -1,35 +1,52 @@
+import { Link } from "react-router-dom";
+
 export default function Home() {
   return (
-    <div className="mt-16 text-center">
-      <h1 className="text-5xl font-extrabold text-gray-900">
-        Learn <span className="text-pink-500">Together</span>,  
-        Grow <span className="text-pink-500">Faster</span> 🚀
+    <div className="text-center mt-16 px-4">
+      <h1 className="text-4xl font-bold">
+        Learn <span className="text-pink-500">Together</span>, Grow{" "}
+        <span className="text-pink-500">Faster</span> 🚀
       </h1>
 
       <p className="mt-4 text-gray-600 text-lg max-w-2xl mx-auto">
-        A community-driven platform where students collaborate, share resources,  
-        form study groups, and track their progress — all in one place.
+        A community-driven platform where students collaborate, share resources,
+        join study groups, and track their learning journey — all in one place.
       </p>
 
-      <button className="mt-8 px-8 py-3 bg-pink-500 text-white rounded-xl shadow-lg hover:bg-pink-600 transition">
+      <Link
+        to="/register"
+        className="inline-block bg-pink-500 text-white px-6 py-3 mt-6 rounded-xl shadow-lg hover:bg-pink-600 transition"
+      >
         Join the Community
-      </button>
+      </Link>
 
-      <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 px-10">
-        <div className="p-6 bg-white shadow rounded-xl">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">📚 Curated Resources</h2>
+      {/* Features Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12">
+        
+        <Link
+          to="/resources"
+          className="p-6 bg-white shadow rounded-xl text-left hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">📚 Curated Resources</h2>
           <p className="text-gray-600">Find the best videos, articles, and roadmaps.</p>
-        </div>
+        </Link>
 
-        <div className="p-6 bg-white shadow rounded-xl">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">👥 Study Groups</h2>
-          <p className="text-gray-600">Join or create learning groups in seconds.</p>
-        </div>
+        <Link
+          to="/groups"
+          className="p-6 bg-white shadow rounded-xl text-left hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">👥 Study Groups</h2>
+          <p className="text-gray-600">Join or create learning groups instantly.</p>
+        </Link>
 
-        <div className="p-6 bg-white shadow rounded-xl">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">📊 Progress Dashboard</h2>
+        <Link
+          to="/dashboard"
+          className="p-6 bg-white shadow rounded-xl text-left hover:shadow-lg transition"
+        >
+          <h2 className="text-xl font-semibold mb-2">📊 Progress Dashboard</h2>
           <p className="text-gray-600">Track topics you've completed and what's left.</p>
-        </div>
+        </Link>
+
       </div>
     </div>
   );

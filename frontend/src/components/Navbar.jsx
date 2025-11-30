@@ -1,36 +1,45 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
 export default function Navbar() {
-  const { pathname } = useLocation();
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Resources", path: "/resources" },
-    { name: "Groups", path: "/groups" },
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Profile", path: "/profile" },
-  ];
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-pink-600">LearnLink</h1>
+    <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <Link to="/" className="text-2xl font-bold text-pink-600">
+        LearnLink
+      </Link>
 
-        <div className="space-x-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`font-medium text-lg ${
-                pathname === item.path
-                  ? "text-pink-500 border-b-2 border-pink-500 pb-1"
-                  : "text-gray-700 hover:text-pink-400"
-              }`}
-            >
-              {item.name}
+      <div className="flex gap-6 text-lg">
+        <Link to="/">Home</Link>
+        <Link to="/resources">Resources</Link>
+        <Link to="/groups">Groups</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/profile">Profile</Link>
+
+        {!token ? (
+          <>
+            <Link to="/login" className="text-pink-600 font-semibold">
+              Login
             </Link>
-          ))}
-        </div>
+            <Link to="/register" className="text-pink-600 font-semibold">
+              Register
+            </Link>
+          </>
+        ) : (
+          <button
+            onClick={handleLogout}
+            className="text-red-500 font-semibold ml-4"
+          >
+            Logout
+          </button>
+        )}
       </div>
     </nav>
   );
