@@ -23,7 +23,7 @@ export default function Home() {
             to="/register"
             className="bg-pink-500 text-white px-6 py-3 rounded-xl shadow hover:bg-pink-600"
           >
-            Join the Community
+            Register
           </Link>
 
           <Link
