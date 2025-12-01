@@ -15,21 +15,21 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// Socket.io setup
-const io = new Server(server, {
-  cors: {
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  },
-});
+// ✅ Allowed origins (production + development)
+const allowedOrigins = [
+  process.env.CLIENT_URL,              // Vercel
+  "http://localhost:5173",             // Local development
+  "http://127.0.0.1:5173"
+];
 
-// Middleware
+// ✅ Express CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: allowedOrigins,
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -43,16 +43,24 @@ app.use("/api/auth", authRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/groups", groupRoutes);
 
+// ✅ Socket.io with correct CORS
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
 // Socket.io events
 io.on("connection", (socket) => {
   console.log("⚡ New socket connected:", socket.id);
-git 
+
   socket.on("join_group", (groupId) => {
     socket.join(groupId);
   });
 
   socket.on("send_message", ({ groupId, message, user }) => {
-    // Broadcast to everyone in that group room
     io.to(groupId).emit("receive_message", {
       groupId,
       message,
