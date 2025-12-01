@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   getGroups,
   createGroupAPI,
@@ -7,6 +8,7 @@ import {
   deleteGroupAPI,
 } from "../api/groups";
 import { useAuth } from "../context/useAuth";
+
 export default function Groups() {
   const { user } = useAuth();
   const [groups, setGroups] = useState([]);
@@ -44,10 +46,9 @@ export default function Groups() {
     setTags("");
   };
 
-  // Join or leave
+  // Join or leave group
   const toggleJoin = async (id, isJoined) => {
     const updated = isJoined ? await leaveGroupAPI(id) : await joinGroupAPI(id);
-
     setGroups((prev) => prev.map((g) => (g._id === id ? updated : g)));
   };
 
@@ -62,7 +63,7 @@ export default function Groups() {
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
       <h1 className="text-3xl font-bold mb-6">Study Groups 👥</h1>
 
-      {/* Create */}
+      {/* Create New Group */}
       <div className="space-y-3 bg-gray-50 p-5 rounded-xl">
         <input
           className="w-full p-2 border rounded"
@@ -87,13 +88,13 @@ export default function Groups() {
 
         <button
           onClick={createGroup}
-          className="w-full py-2 bg-pink-500 text-white rounded"
+          className="w-full py-2 bg-pink-500 text-white rounded hover:bg-pink-600"
         >
           Create Group
         </button>
       </div>
 
-      {/* List */}
+      {/* Group List */}
       <div className="mt-8 space-y-4">
         {groups.length === 0 ? (
           <p className="text-gray-500 text-center">No groups yet.</p>
@@ -103,43 +104,47 @@ export default function Groups() {
             const members = g.joinedUsers?.length || 0;
 
             return (
-              <div key={g._id} className="p-4 bg-gray-50 rounded shadow border">
-                <div className="flex justify-between">
-                  <div>
-                    <h2 className="text-xl font-semibold">{g.name}</h2>
-                    <p>{g.desc}</p>
+              <div
+                key={g._id}
+                className="p-4 bg-gray-50 rounded shadow border flex justify-between"
+              >
+                <div>
+                  <h2 className="text-xl font-semibold">{g.name}</h2>
+                  <p className="mt-1 text-gray-600">{g.desc}</p>
+                  <p className="text-sm mt-2">
+                    Members: <b>{members}</b>
+                  </p>
+                </div>
 
-                    <p className="text-sm mt-2">
-                      Members: <b>{members}</b>
-                    </p>
-                  </div>
+                <div className="flex flex-col items-end gap-3">
 
-                  <div className="flex flex-col items-end gap-3">
-                    {/* Delete only if creator */}
-                    {g.createdBy === user.id && (
-                      <button
-                        onClick={() => deleteGroup(g._id)}
-                        className="text-red-500 text-xl"
-                      >
-                        ✖
-                      </button>
-                    )}
-                    <a
-                      href={`/groups/${g._id}`}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-                    >
-                      View
-                    </a>
-                    {/* Join / Leave */}
+                  {/* Delete if creator */}
+                  {g.createdBy === user.id && (
                     <button
-                      onClick={() => toggleJoin(g._id, isJoined)}
-                      className={`px-4 py-2 rounded text-white ${
-                        isJoined ? "bg-gray-600" : "bg-pink-500"
-                      }`}
+                      onClick={() => deleteGroup(g._id)}
+                      className="text-red-500 text-xl"
                     >
-                      {isJoined ? "Leave Group" : "Join Group"}
+                      ✖
                     </button>
-                  </div>
+                  )}
+
+                  {/* Correct Routing */}
+                  <Link
+                    to={`/groups/${g._id}`}
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                  >
+                    View Group
+                  </Link>
+
+                  {/* Join/Leave Button */}
+                  <button
+                    onClick={() => toggleJoin(g._id, isJoined)}
+                    className={`px-4 py-2 rounded text-white ${
+                      isJoined ? "bg-gray-600" : "bg-pink-500"
+                    }`}
+                  >
+                    {isJoined ? "Leave Group" : "Join Group"}
+                  </button>
                 </div>
               </div>
             );
