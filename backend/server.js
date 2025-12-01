@@ -47,10 +47,13 @@ app.use("/api/groups", groupRoutes);
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ["GET", "POST"],
     credentials: true,
+    methods: ["GET", "POST"]
   },
+  transports: ["websocket", "polling"],
+  allowEIO3: true
 });
+
 
 // Socket.io events
 io.on("connection", (socket) => {
